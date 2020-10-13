@@ -19,38 +19,53 @@
     <title>Artikelku.com</title>
   </head>
   <body>
-    <div class="container mt-5">
-      <div class="row mb-5">
+    <div class="container mt-5 mb-5">
+      <div class="row mb-3">
         <div class="col-12">
-          <a href="./" class="card-link"><h1>Artikelku.com</h1></a>
-          <a href="./addarticle.php" class="btn btn-primary mt-3">Tambah Artikel</a>
+        <a href="./" class="card-link"><h1>Artikelku.com</h1></a>
+        <a href="./index.php" class="btn btn-danger mt-3">Kembali</a>
         </div>
       </div>
       <div class="row">
+        <div class="col-10">
+        <div class="card mt-3">
         <?php 
             require_once('./config/db.php');
             $koneksi = connect();
+            $id = $_GET['id'];
 
-            $query = mysqli_query($koneksi, "SELECT * FROM article");
+            $query = mysqli_query($koneksi, "SELECT * FROM article WHERE id='".$id."'");
         
             if(mysqli_num_rows($query) > 0 ) {
-                while($data = mysqli_fetch_array($query)){
+                $data = mysqli_fetch_array($query);
         ?>
-        <div class="col-4">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold mb-3"><?= $data['title']; ?></h5>
-              <p class="card-text"><?= $data['content']; ?></p>
-              <a href="detail.php?id=<?= $data['id']?>" class="card-link btn btn-primary mt-3">Detail</a>
-              <a href="editarticle.php?id=<?= $data['id']?>" class="card-link btn btn-warning mt-3">Edit</a>
-              <a href="#" onclick="confirmDeleteArticle(<?= $data['id'] ?>)" class="card-link btn btn-danger mt-3">Hapus</a>
-            </div>
+            <form action="model/article.php?edit=true" method="post" class="p-3">
+              <h4 class="card-title">Edit Artikel</h4>
+              <div class="form-group">
+                <input type="hidden" name="id" value="<?= $data['id']; ?>">
+                <input
+                  type="text"
+                  class="form-control mb-4"
+                  id="title"
+                  name="title"
+                  required
+                  value="<?= $data['title']; ?>"
+                />
+                <textarea
+                  class="form-control"
+                  id="content"
+                  name="content"
+                  rows="8"
+                  required
+                ><?= $data['content']; ?></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mt-1">Simpan</button>
+            </form>
+            <?php 
+            } 
+            ?>
           </div>
         </div>
-        <?php 
-                }
-            }
-        ?>
       </div>
     </div>
 
@@ -71,6 +86,5 @@
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
-    <script src="./js/confirm.js"></script>
   </body>
 </html>

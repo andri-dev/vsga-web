@@ -38,6 +38,7 @@
                   id="title"
                   name="title"
                   placeholder="Judul Artikel disini.."
+                  required
                 />
                 <textarea
                   class="form-control"
@@ -45,6 +46,7 @@
                   name="content"
                   rows="8"
                   placeholder="Tulis content disini..."
+                  required
                 ></textarea>
               </div>
               <button type="submit" class="btn btn-primary mt-1">Simpan</button>

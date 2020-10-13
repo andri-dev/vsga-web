@@ -35,6 +35,7 @@
                 $koneksi = connect();
 
                 $id = $_GET['id'];
+                $edit = $_GET['edit'];
                 $query = mysqli_query($koneksi, "SELECT * FROM article WHERE id='". $id . "'");
         
                 if(mysqli_num_rows($query) > 0 ) {
@@ -64,6 +65,8 @@
             <div class="card-body">
               <h5 class="card-title"><?= $row['title']; ?></h5>
               <p class="card-text"><?= $row['content']; ?></p>
+              <a href="./detail.php?id=<?= $id ?>&edit=true&idComment=<?= $row['id'] ?>&title=<?= $row['title'] ?>&content=<?= $row['content'] ?>" class="card-link text-warning">Edit</a>
+              <a href="#" onclick="confirmDeleteComment(<?= $row['articleid'] ?>, <?= $row['id'] ?>)" class="card-link text-danger">Delete</a>
             </div>
           </div>
           <?php 
@@ -71,16 +74,23 @@
             }
           ?>
           <div class="card mt-3">
-            <form action="model/comment.php?add=true" method="post" class="p-3">
+            <form action="model/comment.php?<?= ($edit) ? 'edit=true' : 'add=true' ?>" method="post" class="p-3">
               <h4 class="card-title">Berikan Komentar</h4>
               <div class="form-group">
                 <input type="hidden" name="id-article" value="<?= $id ?>" />
+                <?php
+                  if($edit) {
+                    echo '<input type="hidden" name="id-comment" value="'. $_GET['idComment'] .'" />';
+                  }
+                ?>
                 <input
                   type="text"
                   class="form-control mb-2"
                   id="title-comment"
                   name="title-comment"
                   placeholder="Judul Komentar disini.."
+                  required
+                  value="<?= ($edit) ? $_GET['title'] : '' ?>"
                 />
                 <textarea
                   class="form-control"
@@ -88,7 +98,8 @@
                   name="content-comment"
                   rows="3"
                   placeholder="Tulis komentar disini..."
-                ></textarea>
+                  required
+                ><?= ($edit) ? $_GET['content'] : '' ?></textarea>
               </div>
               <button type="submit" class="btn btn-primary mt-1">Kirim</button>
             </form>
@@ -114,5 +125,6 @@
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
+    <script src="./js/confirm.js"></script>
   </body>
 </html>
